@@ -14,8 +14,11 @@ RUN pip install -r /requirements.txt
 
 # Setup directory structure
 RUN mkdir /app
+RUN mkdir /app/test
+
 WORKDIR /app
 COPY ./app/ /app
+COPY ./test/ /app/test
 
 RUN adduser -D user
 USER user
