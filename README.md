@@ -50,10 +50,19 @@ https://stackoverflow.com/questions/63729350/why-different-copy-paths-between-do
 
 ### Named volume not updating from source file changes
 
+The volume is to be able to make changes in the container and persist those changes on the host.
+
+Changes made made in the Dockerfile that is in the same directory as the path of the mounted volume will not change data contained in the volume.
+
 It looks like you're trying to use docker-compose with a named volume mount and a Dockerfile to modify the contents of that location. This won't work because the Dockerfile is creating an image. The docker-compose is defining the running container that runs on top of that image. You won't be able to modify the volume within the image creation since that volume is only mounted after the image is created an you run the container.
 
 https://stackoverflow.com/questions/38441159/docker-named-volume-not-updating
 
+#### remove the volume all together if we want the contents of the image
 Solution: remove the volume all together where I want the contents of the image
+
+#### volume reflects the files in the host
+
+We are able to move the files into the directory that has been attached to the docker volume
 
 ## CI with github actions
