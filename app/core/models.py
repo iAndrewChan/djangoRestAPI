@@ -12,9 +12,17 @@ class UserManager(BaseUserManager):
     # https://docs.djangoproject.com/en/4.0/topics/auth/customizing/#a-full-example
     # https://docs.djangoproject.com/en/4.0/topics/db/models/
 
-    def create_user(self, employee_id, password, **extra_fields):
+    def create_user(self, password, **extra_fields):
         """creates and saves a new User"""
-        user = self.model(employee_id=employee_id, **extra_fields)
+
+        # Validation
+        # custom exception message
+        if not password:
+            raise ValueError("Users must have a password set")
+        if len(password) < 4:
+            raise ValueError("Password must have at least 4 characters")
+
+        user = self.model(**extra_fields)
         user.set_password(password)
         user.save(using=self._db)
         return user
