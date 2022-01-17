@@ -71,3 +71,14 @@ Solution: remove the volume all together where I want the contents of the image
 
 We are able to move the files into the directory that has been attached to the docker volume
 
+## Making migrations
+
+https://docs.djangoproject.com/en/4.0/ref/django-admin/#makemigrations
+https://docs.djangoproject.com/en/4.0/topics/migrations/
+
+```bash
+docker-compose run app sh -c "python manage.py makemigrations core"
+```
+
+Some similarity to https://liquibase.org/.
+Where Django would create a migrations folder containing database changes
