@@ -23,8 +23,8 @@ class TestUserModel:
     @pytest.mark.parametrize(
         "password, expected_exception_message",
         [
-            (None, "Users must have a password set"),
-            ("tes", "Password must have at least 4 characters"),
+            (None, "User must have a password set"),
+            ("tes", "User password must have at least 4 characters"),
         ],
     )
     def test_create_user_with_password_exceptions(
@@ -34,5 +34,35 @@ class TestUserModel:
 
         with pytest.raises(ValueError) as e:
             get_user_model().objects.create_user(password)
+
+        assert str(e.value) == expected_exception_message
+
+    @pytest.mark.django_db
+    def test_create_superuser_success(self):
+        """Test creating a new super user"""
+        email = "email"
+        password = "password"
+
+        superuser = get_user_model().objects.create_superuser(email, password)
+        assert superuser.email == email
+        assert superuser.check_password(password)
+        assert superuser.is_superuser
+
+    @pytest.mark.django_db
+    @pytest.mark.parametrize(
+        "email, password, expected_exception_message",
+        [
+            (None, None, "Superuser must have an email"),
+            ("email", None, "Superuser must have a password set"),
+            ("email", "tes", "Superuser password must have at least 4 characters"),
+        ],
+    )
+    def test_create_superuser_unsuccessful(
+        self, email, password, expected_exception_message
+    ):
+        """Test creating a new super user unsuccessfully"""
+
+        with pytest.raises(ValueError) as e:
+            get_user_model().objects.create_superuser(email, password)
 
         assert str(e.value) == expected_exception_message
